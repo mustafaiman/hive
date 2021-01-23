@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.hadoop.hive.conf.HiveConf;
+import org.apache.hadoop.hive.ql.exec.Operator;
 import org.apache.hadoop.hive.ql.optimizer.calcite.translator.HiveOpConverterPostProc;
 import org.apache.hadoop.hive.ql.optimizer.correlation.CorrelationOptimizer;
 import org.apache.hadoop.hive.ql.optimizer.correlation.ReduceSinkDeDuplication;
@@ -198,7 +199,7 @@ public class Optimizer {
         !isTezExecEngine) {
       transformations.add(new ReduceSinkDeDuplication());
     }
-    transformations.add(new NonBlockingOpDeDupProc());
+    transformations.add(new NonBlockingOpDeDupProc(true));
     if (HiveConf.getBoolVar(hiveConf, HiveConf.ConfVars.HIVEIDENTITYPROJECTREMOVER)
         && !HiveConf.getBoolVar(hiveConf, HiveConf.ConfVars.HIVE_CBO_RETPATH_HIVEOP)) {
       transformations.add(new IdentityProjectRemover());
@@ -248,9 +249,11 @@ public class Optimizer {
    */
   public ParseContext optimize() throws SemanticException {
     for (Transform t : transformations) {
+      LOG.debug("Before logical optimization\n" + Operator.toString(pctx.getTopOps().values()));
       t.beginPerfLogging();
       pctx = t.transform(pctx);
       t.endPerfLogging(t.toString());
+      LOG.debug("After logical optimization\n" + Operator.toString(pctx.getTopOps().values()));
     }
     return pctx;
   }

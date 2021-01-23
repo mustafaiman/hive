@@ -4113,6 +4113,7 @@ public class Vectorizer implements PhysicalPlanResolver {
     final boolean isEmptyKey = (keysDescs.size() == 0);
     if (!isEmptyKey) {
 
+      LOG.debug("ReduceSink vectorization considering key columns.");
       VectorExpression[] allKeyExpressions = vContext.getVectorExpressions(keysDescs);
 
       final int[] reduceSinkKeyColumnMap = new int[allKeyExpressions.length];
@@ -4148,6 +4149,7 @@ public class Vectorizer implements PhysicalPlanResolver {
     List<ExprNodeDesc> valueDescs = desc.getValueCols();
     final boolean isEmptyValue = (valueDescs.size() == 0);
     if (!isEmptyValue) {
+      LOG.debug("ReduceSink vectorization considering value columns.");
       VectorExpression[] allValueExpressions = vContext.getVectorExpressions(valueDescs);
 
       final int[] reduceSinkValueColumnMap = new int[allValueExpressions.length];
@@ -4201,6 +4203,7 @@ public class Vectorizer implements PhysicalPlanResolver {
       VectorExpression[] reduceSinkBucketExpressions = null;
 
       if (!isEmptyBuckets) {
+        LOG.debug("ReduceSink vectorization considering bucketing columns.");
         VectorExpression[] allBucketExpressions = vContext.getVectorExpressions(bucketDescs);
 
         reduceSinkBucketColumnMap = new int[bucketDescs.size()];
@@ -4230,6 +4233,7 @@ public class Vectorizer implements PhysicalPlanResolver {
       VectorExpression[] reduceSinkPartitionExpressions = null;
 
       if (!isEmptyPartitions) {
+        LOG.debug("ReduceSink vectorization considering partitioning columns.");
         VectorExpression[] allPartitionExpressions = vContext.getVectorExpressions(partitionDescs);
 
         reduceSinkPartitionColumnMap = new int[partitionDescs.size()];

@@ -42,6 +42,7 @@ public class SelectOperator extends Operator<SelectDesc> implements Serializable
   transient Object[] output;
 
   private transient boolean isSelectStarNoCompute = false;
+  private transient boolean isInsertCast = false;
 
   /** Kryo ctor. */
   protected SelectOperator() {
@@ -209,4 +210,11 @@ public class SelectOperator extends Operator<SelectDesc> implements Serializable
     ExprNodeDescUtils.replaceTabAlias(getConf().getColumnExprMap(), oldAlias, newAlias);
   }
 
+  public boolean isInsertCast() {
+    return isInsertCast;
+  }
+
+  public void setInsertCast(boolean insertCast) {
+    isInsertCast = insertCast;
+  }
 }

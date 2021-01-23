@@ -1,0 +1,53 @@
+PREHOOK: query: CREATE TABLE src (key string COMMENT 'default') STORED AS TEXTFILE
+PREHOOK: type: CREATETABLE
+PREHOOK: Output: database:default
+PREHOOK: Output: default@src
+POSTHOOK: query: CREATE TABLE src (key string COMMENT 'default') STORED AS TEXTFILE
+POSTHOOK: type: CREATETABLE
+POSTHOOK: Output: database:default
+POSTHOOK: Output: default@src
+PREHOOK: query: insert into src values ('23'), ('6')
+PREHOOK: type: QUERY
+PREHOOK: Input: _dummy_database@_dummy_table
+PREHOOK: Output: default@src
+POSTHOOK: query: insert into src values ('23'), ('6')
+POSTHOOK: type: QUERY
+POSTHOOK: Input: _dummy_database@_dummy_table
+POSTHOOK: Output: default@src
+POSTHOOK: Lineage: src.key SCRIPT []
+PREHOOK: query: select * from src
+PREHOOK: type: QUERY
+PREHOOK: Input: default@src
+#### A masked pattern was here ####
+POSTHOOK: query: select * from src
+POSTHOOK: type: QUERY
+POSTHOOK: Input: default@src
+#### A masked pattern was here ####
+23
+6
+PREHOOK: query: create table ctas_part (key int) partitioned by (modkey bigint)
+PREHOOK: type: CREATETABLE
+PREHOOK: Output: database:default
+PREHOOK: Output: default@ctas_part
+POSTHOOK: query: create table ctas_part (key int) partitioned by (modkey bigint)
+POSTHOOK: type: CREATETABLE
+POSTHOOK: Output: database:default
+POSTHOOK: Output: default@ctas_part
+PREHOOK: query: select key, ceil(key / 100) from src order by key limit 3
+PREHOOK: type: QUERY
+PREHOOK: Input: default@src
+#### A masked pattern was here ####
+POSTHOOK: query: select key, ceil(key / 100) from src order by key limit 3
+POSTHOOK: type: QUERY
+POSTHOOK: Input: default@src
+#### A masked pattern was here ####
+23	1
+6	1
+PREHOOK: query: select * from ctas_part
+PREHOOK: type: QUERY
+PREHOOK: Input: default@ctas_part
+#### A masked pattern was here ####
+POSTHOOK: query: select * from ctas_part
+POSTHOOK: type: QUERY
+POSTHOOK: Input: default@ctas_part
+#### A masked pattern was here ####

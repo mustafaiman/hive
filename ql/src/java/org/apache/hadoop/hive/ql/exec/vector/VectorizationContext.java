@@ -330,6 +330,7 @@ import com.google.common.annotations.VisibleForTesting;
     for (int i = 0; i < this.projectionColumnNames.size(); i++) {
       projectedColumns.add(i);
       projectionColumnMap.put(projectionColumnNames.get(i), i);
+      LOG.debug("Projection column map added <1> {}:{}", projectionColumnNames.get(i), i);
     }
 
     int firstOutputColumnIndex = projectedColumns.size();
@@ -357,6 +358,7 @@ import com.google.common.annotations.VisibleForTesting;
     for (int i = 0; i < this.projectionColumnNames.size(); i++) {
       projectedColumns.add(i);
       projectionColumnMap.put(projectionColumnNames.get(i), i);
+      LOG.debug("Projection column map added <2> {}:{}", projectionColumnNames.get(i), i);
     }
 
     int firstOutputColumnIndex = projectedColumns.size();
@@ -435,6 +437,7 @@ import com.google.common.annotations.VisibleForTesting;
     projectedColumns.add(index);
     projectionColumnNames.add(columnName);
     projectionColumnMap.put(columnName, index);
+    LOG.debug("Projection column map added <3> {}:{}", columnName, index);
   }
 
   // Finishes the vectorization context after all the initial
@@ -462,6 +465,7 @@ import com.google.common.annotations.VisibleForTesting;
     projectedColumns.add(vectorBatchColIndex);
     projectionColumnNames.add(columnName);
     projectionColumnMap.put(columnName, vectorBatchColIndex);
+    LOG.debug("Projection column map added <4> {}:{}", columnName, vectorBatchColIndex);
   }
 
   public void setInitialTypeInfos(List<TypeInfo> initialTypeInfos) {
@@ -883,6 +887,7 @@ import com.google.common.annotations.VisibleForTesting;
   private VectorExpression getColumnVectorExpression(ExprNodeColumnDesc exprDesc,
       VectorExpressionDescriptor.Mode mode) throws HiveException {
     int columnNum = getInputColumnIndex(exprDesc.getColumn());
+    LOG.debug("getColumnVectorExpression {} at {}", exprDesc, columnNum);
     VectorExpression expr;
     switch (mode) {
     case FILTER:
@@ -935,7 +940,10 @@ import com.google.common.annotations.VisibleForTesting;
       return new VectorExpression[0];
     }
     VectorExpression[] ret = new VectorExpression[exprNodes.size()];
+
+    LOG.debug("Attempt to vectorize {} expression nodes", exprNodes.size());
     for (ExprNodeDesc e : exprNodes) {
+      LOG.debug("Attempting {}", e);
       ret[i++] = getVectorExpression(e, mode);
     }
     return ret;
